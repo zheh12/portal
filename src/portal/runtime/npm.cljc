@@ -4,6 +4,11 @@
             [portal.runtime.fs :as fs]
             [portal.runtime.json :as json]))
 
+(def ^:private npm-search-paths (atom []))
+(defn add-npm-search-path! [path]
+  (swap! npm-search-paths
+         conj (fs/join path "node_modules")))
+
 (defn- package-resolve [module]
   (when-let [package (fs/exists (fs/join module "package.json"))]
     (fs/exists
@@ -54,7 +59,8 @@
   ([module root]
    (if (relative? module)
      (relative-resolve module root)
-     (let [search-paths (get-parents root)]
+     (let [search-paths (concat (get-parents root)
+                                @npm-search-paths)]
        (or
         (some
          (fn [root]

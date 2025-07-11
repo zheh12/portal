@@ -10,8 +10,22 @@
             #?(:clj  [clojure.java.io :as io]
                :cljs [portal.resources :as io])
             [clojure.set :as set]
+            #?(:clj [portal.runtime.jvm.server :as server])
             [portal.runtime :as rt]
+            [portal.runtime.npm :as npm]
             [portal.runtime.cson :as cson]))
+
+#?(:clj
+   (defn add-load-classpath!
+     "Add a path to the classpath for loading resources."
+     [path]
+     (server/add-load-classpath! path)))
+
+(defn add-npm-search-path!
+  "Add a path to the npm search paths for resolving npm packages."
+  {:added "0.1.0"}
+  [path]
+  (npm/add-npm-search-path! path))
 
 (defn submit
   "Tap target function.
@@ -178,6 +192,15 @@
            (= :out tag) (do (print val) (flush))
            (= :err tag) (print-err val))))
      (cond-> result (not (:verbose opts)) :value))))
+
+(defmacro eval
+  [body]
+  (let [code (pr-str body)]
+    `(eval-str ~code)))
+
+(defn eval-js-str
+  [js-code]
+  (eval-str (str "(js/eval \"" js-code "\")")))
 
 (defn sessions
   "Get all current portal sessions."

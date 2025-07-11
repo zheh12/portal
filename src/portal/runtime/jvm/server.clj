@@ -12,6 +12,7 @@
             [portal.runtime.npm :as npm]
             [portal.runtime.rpc :as rpc])
   (:import [java.io File PushbackReader]
+           (java.net URL URLClassLoader)
            [java.util UUID]))
 
 (def ^:private enable-cors
@@ -21,6 +22,21 @@
     "Access-Control-Allow-Headers" "origin, content-type"
     "Access-Control-Allow-Methods" "POST, GET, OPTIONS, DELETE"
     "Access-Control-Max-Age"       86400}})
+
+(def ^:private url-classpath
+  (proxy [URLClassLoader] [(into-array URL [])]
+    (addURL [url]
+      (proxy-super addURL url))))
+
+(defn add-load-classpath!
+  [path]
+  (.addURL url-classpath (io/as-url (io/file path))))
+
+(defn find-resource [path]
+  (let [resource (io/resource path)]
+    (if resource
+      resource
+      (.getResource url-classpath path))))
 
 (defmulti route (juxt :request-method :uri))
 
@@ -132,7 +148,7 @@
         (node-resolve m)
         (some
          (fn [ext]
-           (when-let [resource (io/resource (str path ext))]
+           (when-let [resource (find-resource (str path ext))]
              {:lang (if (= ext ".js") :js :clj)
               :file (str resource)
               :source (slurp resource)}))

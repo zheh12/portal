@@ -23,6 +23,18 @@
        ":artifact"  (-> options :jar-file str pr-str)
        ":pom-file"  (-> options pkg/pom-file str pr-str)))
 
+(defn- deploy-local []
+  (pkg/pom)
+  (clj "-X:deploy"
+       ":installer" ":local"
+       ":artifact"  (-> options :jar-file str pr-str)
+       ":pom-file"  (-> options pkg/pom-file str pr-str)))
+
+(defn install
+  []
+  (pkg/jar)
+  (deploy-local))
+
 (defn deploy []
   (pkg/all)
   (deploy-clojars)

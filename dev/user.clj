@@ -24,7 +24,8 @@
   (p/close)
   (p/docs {:mode :dev})
 
-  (def portal (p/open {:launcher :auto}))
+  (def portal (p/open {:mode :dev}))
+
   (def dev    (p/open {:mode :dev}))
   (def emacs  (p/open {:mode :dev :launcher :emacs}))
   (def code   (p/open {:mode :dev :launcher :vs-code}))
@@ -33,6 +34,19 @@
   (def tetris (p/open {:mode :dev :main 'tetris.core/app}))
 
   (p/repl portal)
+
+  (p/eval-str "(require '[portal.ui.viewer.plotly])")
+  (tap>
+    ^{:portal.viewer/default :portal.viewer/plotly}
+    {:data
+     [{:x [1 2 3]
+       :y [2 6 3]
+       :type "scatter"
+       :mode "lines+markers"
+       :marker {:color "red"}}
+      {:type "bar" :x [1 2 3] :y [2 5 3]}]})
+
+  (p/eval-str "(js/console.info \"Hello, Portal!\")")
 
   (require '[examples.data :refer [data]])
   (dotimes [_i 25] (tap> data)))
