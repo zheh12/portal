@@ -179,7 +179,7 @@
            (do
              (add-watch a session-id #'invalidate)
              (conj atoms a))))) a)
-      (set-timeout #(notify session-id a) 0))))
+     (set-timeout #(notify session-id a) 0))))
 
 (defn- value->id [value]
   (let [k   (value->key value)

@@ -47,6 +47,8 @@
             [portal.ui.viewer.tree :as tree]
             [portal.ui.viewer.vega :as vega]
             [portal.ui.viewer.vega-lite :as vega-lite]
+            [portal.ui.viewer.plotly :as plotly]
+            [portal.ui.viewer.highcharts :as highcharts]
             [reagent.core :as r]))
 
 (defn- select-viewer []
@@ -515,7 +517,9 @@
    date-time/viewer
    relative-time/viewer
    source-location/viewer
-   spec/viewer])
+   spec/viewer
+   plotly/viewer
+   highcharts/viewer])
 
 (reset! api/viewers viewers)
 

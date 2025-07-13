@@ -24,7 +24,8 @@
   (p/close)
   (p/docs {:mode :dev})
 
-  (def portal (p/open {:mode :dev}))
+  (def portal (p/open {:mode :dev
+                       :port 5678}))
 
   (def dev    (p/open {:mode :dev}))
   (def emacs  (p/open {:mode :dev :launcher :emacs}))
@@ -47,6 +48,12 @@
       {:type "bar" :x [1 2 3] :y [2 5 3]}]})
 
   (p/eval-str "(js/console.info \"Hello, Portal!\")")
+
+  (tap> 1)
+  (tap>
+    ^{:portal.viewer/default :portal.viewer/highcharts-stock}
+    {:title {:text "My Stock chart"}
+     :series [{:data [1 2 3 4 5]}]})
 
   (require '[examples.data :refer [data]])
   (dotimes [_i 25] (tap> data)))

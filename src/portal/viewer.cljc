@@ -183,3 +183,7 @@
 (defn size-bytes
   ([value] (default value ::size-bytes))
   ([value opts] (default value  ::size-bytes opts)))
+
+(defn plotly
+  ([value] (default value ::plotly))
+  ([value opts] (default value ::plotly opts)))
