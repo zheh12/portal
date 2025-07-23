@@ -519,7 +519,9 @@
    source-location/viewer
    spec/viewer
    plotly/viewer
-   highcharts/viewer])
+   plotly/kline
+   highcharts/kline
+   highcharts/kline-bollinger])
 
 (reset! api/viewers viewers)
 

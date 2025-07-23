@@ -26,7 +26,6 @@
 
   (def portal (p/open {:mode :dev
                        :port 5678}))
-
   (def dev    (p/open {:mode :dev}))
   (def emacs  (p/open {:mode :dev :launcher :emacs}))
   (def code   (p/open {:mode :dev :launcher :vs-code}))
